@@ -8,7 +8,6 @@
     "pack": "webpack --progress --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tscompile": "tsc"
-
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
+    "leapjs": "^0.6.4",
     "three": "^0.84.0"
   }
 }
