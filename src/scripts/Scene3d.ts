@@ -9,6 +9,10 @@ export class Scene3d {
     private _camera :THREE.PerspectiveCamera;
     public model: THREE.Object3D;
 
+    get camera() :THREE.PerspectiveCamera {
+        return this._camera;
+    }
+
     constructor(){}
 
     public Init(domRoot :HTMLElement){

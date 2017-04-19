@@ -44,8 +44,11 @@ export class App {
 
     private AddLighting(): void {
 
-        let light = new THREE.PointLight(0xffffff, 1, 50);
-        light.position.set(0, 10, 5);
-        this._scene.AddObject(light);
+        var ambientLight = new THREE.AmbientLight(0x404040, .2); // soft white light
+        this._scene.AddObject(ambientLight);
+
+        let pointLight = new THREE.PointLight(0xffffff, 1, 50);
+        pointLight.position.set(0, 10, 5);
+        this._scene.AddObject(pointLight);
     }
 }
