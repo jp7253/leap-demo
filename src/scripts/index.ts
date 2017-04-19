@@ -12,20 +12,18 @@ app.StartLoop((scene, leapController) => {
 
     let leapFrame = leapController.frame();
 
-    if (!scene.model) return;
+    if (!leapFrame.valid || !scene.model) {
+        console.log('INVALID FRAME');
+        return;
+    }
 
-    switch (leapFrame.hands.length) {
-        case 0: noHands(scene);
-            break;
-        case 1: oneHands(scene, leapFrame.hands[0]);
-            break;
-        case 2:
+    if (leapFrame.hands.length == 2) {
 
-            let leftHand = leapFrame.hands[0].type == 'left' ? leapFrame.hands[0] : leapFrame.hands[1];
-            let rightHand = leapFrame.hands[1].type == 'right' ? leapFrame.hands[1] : leapFrame.hands[0];
-
-            twoHands(scene, leftHand, rightHand);
-            break;
+        console.log('TWO HANDS');
+        twoHands(scene, leapFrame);
+    }
+    else {
+        scene.model.rotation.z += 0.005;
     }
 });
 
@@ -49,7 +47,13 @@ function oneHands(scene: Scene3d, hand: any): void {
     // scene.model.rotation.x = rotationX;
 }
 
-function twoHands(scene: Scene3d, leftHand: any, rightHand: any) {
+function twoHands(scene: Scene3d, leapFrame :any) {
+
+    let leftHandIndex = leapFrame.hands[0].type == 'left' ? 0 : 1;
+    let rightHandIndex = 1-leftHandIndex;
+
+    let leftHand = leapFrame.hands[leftHandIndex];
+    let rightHand = leapFrame.hands[rightHandIndex];
 
     //Figure out how far appart the hands are    
     let leftHandPos = Leap.vec3.fromValues(leftHand.palmPosition[0], leftHand.palmPosition[1], leftHand.palmPosition[2]);
@@ -63,8 +67,8 @@ function twoHands(scene: Scene3d, leftHand: any, rightHand: any) {
     let vector = Leap.vec3.create();
     Leap.vec3.sub(vector, leftHandPos, rightHandPos);
 
-    let rotationZ = Utils.Map(vector[2], -300, 300, 3, 9);
-    let rotationY = Utils.Map(vector[1], -300, 300, 3, 9);
-    scene.model.rotation.z = rotationZ;
-    scene.model.rotation.y = rotationY;
+    let rotationZ = Utils.Map(vector[2], -300, 300, -1.5, 1.5);
+    let rotationY = Utils.Map(vector[1], -300, 300, -1.5, 1.5);
+    scene.model.rotation.z = (scene.model.rotation.z + rotationZ) /2;
+    scene.model.rotation.y = (scene.model.rotation.y + rotationY) /2;
 }
