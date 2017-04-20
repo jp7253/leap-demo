@@ -21,6 +21,7 @@ export class Scene3d {
 
         this._camera = new THREE.PerspectiveCamera(45, winSize.width / winSize.height, 0.1, 1000);
         this._camera.position.z = 30;
+        this._camera.position.x = 3.5;
 
         this._renderer.setSize(winSize.width, winSize.height);
         window.addEventListener('resize', ()=>{
